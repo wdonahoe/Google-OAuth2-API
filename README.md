@@ -1,2 +1,2 @@
-# metro-trip-planner
-A webapp that uses the WMATA API to recommend metro trips.
+# Google-OAuth2-API
+Skeleton for setting up express passport with custom Google OAuth callback for API use.
