@@ -1,32 +1,29 @@
 var express 	= require('express');
 var httpStatus 	= require('http-status');
-var user 		= require('./controllers/user');
-var session 	= require('./controllers/session');
+var router 		= express.Router();
 
-module.exports = function(passport){
-	var router = express.Router();
-
-	router.route('/session')
-		.post(session.create)
-		.delete(session.destroy);
+var routes = function(passport){
 
 	router.route('/auth/google')
-		.get(passport.authenticate('google', { scope: 'https://www.googleapis.com/auth/plus.login' }));
+		.get(passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 	router.route('/auth/google/callback')
-		.get(passport.authenticate('google', function(req, res){
-			if (err) 
-				return next(err);
-			if (!user)
-				return res.sendStatus(httpStatus[401]).end();
-			req.logIn(user, function(err){
-				if (err)
+		.get(function(req, res, next){
+			passport.authenticate('google', function(err, user){
+				if (err) 
 					return next(err);
-				// FINISH
-			});
-		}))
+				if (!user)
+					return res.sendStatus(httpStatus[401]).end();
+				req.logIn(user, function(err){
+					if (err)
+						return next(err);
+					return next(null,user);
+				});
+			})(req, res, next);
+		});
 
-};
+	return router;
+}
 
 function isLoggedIn(req, res, next){
 	if (req.isAuthenticated())
@@ -34,3 +31,5 @@ function isLoggedIn(req, res, next){
 
 	res.sendStatus(httpStatus[401]).end();
 }
+
+module.exports = router;

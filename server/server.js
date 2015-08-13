@@ -33,7 +33,7 @@ db.on('error', function(err){
 	logger.error(err);
 });
 
-//require('./config/passport')(passport);
+require('./config/passport')(passport);
 app.use(session({ secret: config.secret, saveUninitialized: true, resave: true }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -41,7 +41,7 @@ app.use(passport.session());
 app.get('/', function(req,res){
 	res.sendFile('./index.html', { root: '../client' });
 });
-app.use('/api', require('./routes'));
+app.use('/api', require('./routes')(passport));
 app.use('*', function(req, res){
 	res.sendStatus(httpStatus[404]).end();
 });
