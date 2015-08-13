@@ -14,7 +14,7 @@ var routes = function(passport){
 					return next(err);
 				if (!user)
 					return res.sendStatus(httpStatus[401]).end();
-				req.logIn(user, function(err){
+				req.login(user, function(err){
 					if (err)
 						return next(err);
 					return next(null,user);
@@ -32,4 +32,4 @@ function isLoggedIn(req, res, next){
 	res.sendStatus(httpStatus[401]).end();
 }
 
-module.exports = router;
+module.exports = routes;

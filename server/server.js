@@ -13,9 +13,6 @@ var config 			= require('./config/config');
 var app 			= express();
 var port 			= process.env.PORT || 3000
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
 app.use(morgan('combined', {
 	stream: {
 		write: function(message, encoding){
@@ -23,6 +20,9 @@ app.use(morgan('combined', {
 		}
 	}
 }));
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.connect(config.mongo.url);
 var db = mongoose.connection;
