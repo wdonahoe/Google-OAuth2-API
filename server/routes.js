@@ -17,7 +17,7 @@ var routes = function(passport){
 				req.login(user, function(err){
 					if (err)
 						return next(err);
-					return next(null,user);
+					return res.sendStatus(httpStatus[201]).end();
 				});
 			})(req, res, next);
 		});
